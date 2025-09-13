@@ -32,11 +32,10 @@ export default function App() {
     async function load() {
       setLoading(true);
       try {
-        const res = await fetch("/riyad.json");
-        if (!res.ok)
-          throw new Error(
-            "Could not load /riyad.json. Put your file in public/riyad.json"
-          );
+        // Use Vite's BASE_URL so path works in dev and production (repo pages)
+        const base = import.meta.env.BASE_URL || '/';
+        const res = await fetch(`${base}riyad.json`);
+        if (!res.ok) throw new Error(`Could not load ${base}riyad.json (status ${res.status})`);
         const json = await res.json();
         if (!cancelled) setData(json);
       } catch (err) {
@@ -49,7 +48,7 @@ export default function App() {
     load();
     return () => (cancelled = true);
   }, []);
-
+  
   // --- indexing: chapters and hadiths by chapter ---
   const chapters = useMemo(() => {
     if (!data) return [];
