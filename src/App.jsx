@@ -9,6 +9,8 @@ export default function App() {
   const [chapterFilter, setChapterFilter] = useState(0);
   const [hadithNumber, setHadithNumber] = useState(1);
   const [lang, setLang] = useState("english");
+  const [fontSize, setFontSize] = useState(18); // default 18px
+
   const bgImages = [
     "https://images.pexels.com/photos/158063/bellingrath-gardens-alabama-landscape-scenic-158063.jpeg",
     "https://images.pexels.com/photos/158028/bellingrath-gardens-alabama-landscape-scenic-158028.jpeg",
@@ -18,12 +20,8 @@ export default function App() {
     "https://images.pexels.com/photos/21529778/pexels-photo-21529778.jpeg",
     "https://images.pexels.com/photos/3713816/pexels-photo-3713816.jpeg",
     "https://images.pexels.com/photos/29095734/pexels-photo-29095734.jpeg",
-
-
-   
   ];
-  
-  
+
   const [bgIndex, setBgIndex] = useState(0);
 
   // --- load JSON ---
@@ -33,9 +31,12 @@ export default function App() {
       setLoading(true);
       try {
         // Use Vite's BASE_URL so path works in dev and production (repo pages)
-        const base = import.meta.env.BASE_URL || '/';
+        const base = import.meta.env.BASE_URL || "/";
         const res = await fetch(`${base}riyad.json`);
-        if (!res.ok) throw new Error(`Could not load ${base}riyad.json (status ${res.status})`);
+        if (!res.ok)
+          throw new Error(
+            `Could not load ${base}riyad.json (status ${res.status})`
+          );
         const json = await res.json();
         if (!cancelled) setData(json);
       } catch (err) {
@@ -48,7 +49,7 @@ export default function App() {
     load();
     return () => (cancelled = true);
   }, []);
-  
+
   // --- indexing: chapters and hadiths by chapter ---
   const chapters = useMemo(() => {
     if (!data) return [];
@@ -76,6 +77,15 @@ export default function App() {
     else setHadithNumber(1);
     setBgIndex((i) => (i + 1) % bgImages.length);
   }, [chapterFilter, hadithsByChapter]);
+
+  useEffect(() => {
+    const savedSize = localStorage.getItem("fontSize");
+    if (savedSize) setFontSize(Number(savedSize));
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("fontSize", fontSize);
+  }, [fontSize]);
 
   // ensure chapterFilter exists in data
   useEffect(() => {
@@ -623,6 +633,21 @@ export default function App() {
                 <option value="arabic">Arabic</option>
               </select>
             </div>
+            <div>
+              <button
+                onClick={() => setFontSize((f) => Math.max(14, f - 2))}
+                className="font-btn"
+              >
+                A-
+              </button>
+
+              <button
+                onClick={() => setFontSize((f) => Math.min(36, f + 2))}
+                className="font-btn"
+              >
+                A+
+              </button>
+            </div>
           </header>
 
           <section className="controls-card">
@@ -689,7 +714,7 @@ export default function App() {
               >
                 {(hadithsByChapter[chapterFilter] || []).map((h) => (
                   <option key={h.id} value={h.idInBook}>
-                    #{h.idInBook} 
+                    #{h.idInBook}
                   </option>
                 ))}
               </select>
@@ -742,9 +767,7 @@ export default function App() {
                         {currentHadith.idInBook} — Hadith {hadithPosInfo.pos} of{" "}
                         {hadithPosInfo.total}
                       </div>
-                    
                     </div>
-                    <div className="muted">Unique ID: {currentHadith.id}</div>
                   </div>
 
                   <div style={{ marginTop: 8 }}>
@@ -773,7 +796,13 @@ export default function App() {
                         </div>
 
                         {/* important sentences highlighted AND words/phrases bolded inside */}
-                        <div className="eng-text">
+                        <div
+                          className="eng-text"
+                          style={{
+                            fontSize: `${fontSize}px`,
+                            lineHeight: "1.6",
+                          }}
+                        >
                           {highlightImportantSentences(
                             (currentHadith.english &&
                               currentHadith.english.text) ||
@@ -784,13 +813,28 @@ export default function App() {
                         </div>
 
                         {currentHadith.arabic && (
-                          <div className="arabic-small" dir="rtl">
+                          <div
+                            className="arabic-small"
+                            dir="rtl"
+                            style={{
+                              fontSize: `${fontSize + 4}px`,
+                              lineHeight: "1.6",
+                            }}
+                          >
                             {currentHadith.arabic}
                           </div>
                         )}
                       </div>
                     ) : (
-                      <div className="arabic-only" dir="rtl">
+                      <div
+                        className="arabic-only"
+                        style={{
+                          fontSize: `${fontSize + 2}px`,
+                          lineHeight: "2",
+                          fontFamily: '"Noto Naskh Arabic", serif',
+                        }}
+                        dir="rtl"
+                      >
                         {currentHadith.arabic}
                       </div>
                     )}
@@ -800,9 +844,7 @@ export default function App() {
             </div>
           </main>
 
-          <footer className="footer-note">
-
-          </footer>
+          <footer className="footer-note"></footer>
         </div>
       </div>
 

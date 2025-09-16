@@ -89,6 +89,7 @@ html,body,#root{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,S
   color:var(--accent);
   padding:20px;
   box-shadow: 0 8px 30px rgba(2,6,23,0.25);
+  font-family: "Merriweather", Georgia, serif; 
 }
 
 .chapter-line{font-size:14px;color:var(--muted);margin-bottom:8px}
@@ -102,8 +103,8 @@ html,body,#root{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,S
 /* hadith body */
 .hadith-body{margin-top:12px}
 .narrator{font-weight:600;margin-bottom:8px}
-.eng-text{white-space:pre-wrap;font-size:16px;line-height:1.7;color:#0b1220}
-.arabic-small{margin-top:16px;direction:rtl;font-family:'Noto Naskh Arabic', serif;font-size:18px;line-height:2;color:#0b1220}
+.eng-text{  font-family: "Merriweather", Georgia, serif;  white-space:pre-wrap;font-size:16px;line-height:1.7; color: #1f2937;;text-align: justify;}
+.arabic-small{margin-top:16px;direction:rtl;font-family:'Noto Naskh Arabic', serif;font-size:22px;line-height:2;color:#0b1220}
 .arabic-only{direction:rtl;font-family:'Noto Naskh Arabic', serif;font-size:22px;line-height:2;color:#0b1220}
 
 /* actions */
@@ -181,8 +182,7 @@ html,body,#root{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,S
 
 /* Important sentence highlight */
 .important-sentence {
-  background: rgba(234, 233, 225, 0.95); /* warm yellow */
-  font-weight: 700;
+  background: rgba(232, 232, 232, 0.95); /* warm yellow */
   border-radius: 6px;
   padding: 4px 6px;
   display: inline-block;
@@ -216,4 +216,31 @@ html,body,#root{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,S
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 
   transition: all 0.2s ease;
+}
+.font-btn {
+  padding: 6px 14px;
+  margin: 2px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  outline: none;
+  cursor: pointer;
+
+  background: linear-gradient(135deg, #f3f4f6, #e5e7eb); /* subtle gray gradient */
+  color: #374151; /* slate-700 */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+  transition: all 0.2s ease;
+}
+
+.font-btn:hover {
+  background: linear-gradient(135deg, #e5e7eb, #d1d5db);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.font-btn:active {
+  transform: scale(0.96);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
